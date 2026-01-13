@@ -1,5 +1,20 @@
 import streamlit as st
+import time
 
+st.set_page_config(
+    page_title="Дашборд поручений",
+    layout="wide"
+)
+
+# === АВТООБНОВЛЕНИЕ КАЖДЫЕ 30 СЕКУНД ===
+REFRESH_INTERVAL = 30  # секунд
+
+if "last_refresh" not in st.session_state:
+    st.session_state.last_refresh = time.time()
+
+if time.time() - st.session_state.last_refresh >= REFRESH_INTERVAL:
+    st.session_state.last_refresh = time.time()
+    st.experimental_rerun()
 # ================== НАСТРОЙКИ СТРАНИЦЫ ==================
 st.set_page_config(
     page_title="Дашборд поручений",
