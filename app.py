@@ -1,12 +1,17 @@
 import streamlit as st
 import time
 
+# =====================================================
+# НАСТРОЙКИ СТРАНИЦЫ (ТОЛЬКО ОДИН РАЗ!)
+# =====================================================
 st.set_page_config(
     page_title="Дашборд поручений",
     layout="wide"
 )
 
-# === АВТООБНОВЛЕНИЕ КАЖДЫЕ 30 СЕКУНД ===
+# =====================================================
+# АВТООБНОВЛЕНИЕ КАЖДЫЕ 30 СЕКУНД
+# =====================================================
 REFRESH_INTERVAL = 30  # секунд
 
 if "last_refresh" not in st.session_state:
@@ -15,37 +20,22 @@ if "last_refresh" not in st.session_state:
 if time.time() - st.session_state.last_refresh >= REFRESH_INTERVAL:
     st.session_state.last_refresh = time.time()
     st.experimental_rerun()
-# ================== НАСТРОЙКИ СТРАНИЦЫ ==================
-st.set_page_config(
-    page_title="Дашборд поручений",
-    layout="wide"
-)
 
-# ================== СТИЛИ ==================
+# =====================================================
+# СТИЛИ
+# =====================================================
 st.markdown("""
 <style>
-/* ===== ФОН ===== */
 html, body, [data-testid="stAppViewContainer"] {
     background-color: #F5F6F8 !important;
 }
 
-/* ===== ВЕСЬ ТЕКСТ ЧЁРНЫЙ ===== */
+/* ВЕСЬ ТЕКСТ ЧЁРНЫЙ */
 h1, h2, h3, p, div, span {
-    color: #000000;
+    color: #000000 !important;
 }
 
-/* ===== ЗАГОЛОВКИ ===== */
-h2, h3 {
-    margin-bottom: 6px;
-}
-
-/* ===== ПОДПИСИ ===== */
-.caption {
-    font-size: 14px;
-    color: #000000;
-}
-
-/* ===== ВЕРХНИЕ КАРТОЧКИ ===== */
+/* КАРТОЧКИ */
 .card {
     background: #FFFFFF;
     border-radius: 18px;
@@ -70,11 +60,11 @@ h2, h3 {
     font-size: 14px;
 }
 
-.blue  { border-bottom: 6px solid #4F7DF3; }
+.blue { border-bottom: 6px solid #4F7DF3; }
 .green { border-bottom: 6px solid #22C55E; }
-.red   { border-bottom: 6px solid #8B1E3F; }
+.red { border-bottom: 6px solid #8B1E3F; }
 
-/* ===== ИКОНКИ ===== */
+/* ИКОНКИ */
 .icon {
     position: absolute;
     right: 20px;
@@ -85,33 +75,32 @@ h2, h3 {
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
     font-size: 24px;
-    color: #FFFFFF;
 }
 
-.icon-blue  { background: #4F7DF3; }
+.icon-blue { background: #4F7DF3; }
 .icon-green { background: #22C55E; }
-.icon-red   { background: #8B1E3F; }
+.icon-red { background: #8B1E3F; }
 
-/* ===== СЕКЦИИ ===== */
+/* БЛОКИ УПРАВЛЕНИЙ */
 .section {
     background: #FFFFFF;
     border-radius: 20px;
     padding: 18px;
     box-shadow: 0 12px 28px rgba(0,0,0,0.08);
-    height: 200px;
+    height: 210px;
 }
 
 .section-title {
     font-size: 15px;
     font-weight: 700;
-    margin-bottom: 12px;
 }
 
-/* ===== МЕТРИКИ ===== */
 .metrics {
     display: flex;
     gap: 14px;
+    margin-top: 18px;
 }
 
 .metric {
@@ -130,34 +119,31 @@ h2, h3 {
     font-size: 13px;
 }
 
-/* ===== ЦВЕТА ===== */
-.m-red    { color: #8B1E3F; }
-.m-yellow { color: #D97706; }
-.m-green  { color: #16A34A; }
-
-.bg-red    { background: #FDECEF; }
+.bg-red { background: #FDECEF; }
 .bg-yellow { background: #FFF4E5; }
-.bg-green  { background: #ECFDF5; }
+.bg-green { background: #ECFDF5; }
 
-/* ===== ССЫЛКИ (ТОЛЬКО ЗАГОЛОВКИ) ===== */
+.m-red { color: #8B1E3F; }
+.m-yellow { color: #D97706; }
+.m-green { color: #16A34A; }
+
+/* УБИРАЕМ ПОДЧЕРКИВАНИЯ ССЫЛОК */
 a {
-    color: #000000 !important;   /* чёрный как весь текст */
     text-decoration: none !important;
-    font-weight: 700;
-}
-
-a:hover {
-    color: #000000 !important;
-    text-decoration: none !important;
+    color: inherit !important;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ================== ЗАГОЛОВОК ==================
+# =====================================================
+# ЗАГОЛОВОК
+# =====================================================
 st.markdown("## 📊 Дашборд поручений")
-st.markdown("<div class='caption'>Обзор состояния и нагрузки по управлениям</div>", unsafe_allow_html=True)
+st.markdown("<div style='font-size:14px;'>Обзор состояния по управлениям (автообновление каждые 30 сек)</div>", unsafe_allow_html=True)
 
-# ================== ВЕРХНИЕ КАРТОЧКИ ==================
+# =====================================================
+# ВЕРХНИЕ КАРТОЧКИ
+# =====================================================
 c1, c2, c3 = st.columns(3)
 
 with c1:
@@ -165,8 +151,8 @@ with c1:
     <div class="card blue">
         <div class="card-title">Всего поручений</div>
         <div class="card-value">120</div>
-        <div class="card-desc">Общее количество поручений</div>
-        <div class="icon icon-blue">📊</div>
+        <div class="card-desc">Общее количество</div>
+        <div class="icon icon-blue">📂</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -190,26 +176,26 @@ with c3:
     </div>
     """, unsafe_allow_html=True)
 
-# ================== РАЗБИВКА ПО УПРАВЛЕНИЯМ ==================
+# =====================================================
+# РАЗБИВКА ПО УПРАВЛЕНИЯМ (БЕЗ "НАГРУЗКИ")
+# =====================================================
 st.markdown("### 📌 Разбивка по управлениям")
 
-def management_block(title, link, r, y, g):
+def management_block(title, overdue, today, in_work):
     st.markdown(f"""
-    <div class="section blue">
-        <div class="section-title">
-            <a href="{link}" target="_blank">{title}</a>
-        </div>
+    <div class="section">
+        <div class="section-title">{title}</div>
         <div class="metrics">
             <div class="metric bg-red">
-                <div class="metric-value m-red">{r}</div>
+                <div class="metric-value m-red">{overdue}</div>
                 <div class="metric-label">Просрочено</div>
             </div>
             <div class="metric bg-yellow">
-                <div class="metric-value m-yellow">{y}</div>
+                <div class="metric-value m-yellow">{today}</div>
                 <div class="metric-label">Сегодня</div>
             </div>
             <div class="metric bg-green">
-                <div class="metric-value m-green">{g}</div>
+                <div class="metric-value m-green">{in_work}</div>
                 <div class="metric-label">В работе</div>
             </div>
         </div>
@@ -219,45 +205,10 @@ def management_block(title, link, r, y, g):
 u1, u2, u3 = st.columns(3)
 
 with u1:
-    management_block(
-        "Управление СО",
-        "https://docs.google.com/spreadsheets/d/1zCHKMi_0VFaZ5W1pPUeHXG1k7C8u8zmR60D1fJrKt_A/edit#gid=1562831922",
-        11, 0, 20
-    )
+    management_block("Управление СО", 11, 0, 20)
 
 with u2:
-    management_block(
-        "Управление УСО",
-        "https://docs.google.com/spreadsheets/d/1zCHKMi_0VFaZ5W1pPUeHXG1k7C8u8zmR60D1fJrKt_A/edit#gid=1484976844",
-        15, 0, 28
-    )
+    management_block("Управление УСО", 15, 0, 28)
 
 with u3:
-    management_block(
-        "Управление ЗОИ",
-        "https://docs.google.com/spreadsheets/d/1zCHKMi_0VFaZ5W1pPUeHXG1k7C8u8zmR60D1fJrKt_A/edit#gid=0",
-        26, 0, 51
-    )
-
-# ================== НАГРУЗКА ==================
-st.markdown("### 📊 Нагрузка")
-
-def load_block(title, value):
-    st.markdown(f"""
-    <div class="section green" style="height:160px;">
-        <div class="section-title">{title}</div>
-        <div style="font-size:36px; font-weight:800; margin-top:24px;">
-            {value}%
-        </div>
-        <div class="caption">Текущая нагрузка</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-n1, n2, n3 = st.columns(3)
-
-with n1:
-    load_block("Управление СО", 20)
-with n2:
-    load_block("Управление УСО", 29)
-with n3:
-    load_block("Управление ЗОИ", 50)
+    management_block("Управление ЗОИ", 26, 0, 51)
